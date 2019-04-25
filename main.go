@@ -2,7 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/gorilla/mux"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
 	"fmt"
 )
@@ -34,6 +37,10 @@ type elements struct {
 
 }
 
+func allElements(w http.ResponseWriter, r *http.Request) {
+	_ = json.NewEncoder(w).Encode(element)
+}
+
 func main() {
 
 	// Reading JSON file
@@ -45,5 +52,11 @@ func main() {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	_ = json.Unmarshal(byteValue, &element)
 
-	fmt.Println(element)
+	router := mux.NewRouter()
+	router.HandleFunc("/", allElements).Methods("GET")
+
+	err = http.ListenAndServe(":3000", router)
+	if err!=nil {
+		log.Fatal(err)
+	}
 }
