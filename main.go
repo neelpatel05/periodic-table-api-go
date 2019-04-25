@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"fmt"
+	"strings"
 )
 
 var element []elements
@@ -39,8 +40,25 @@ type elements struct {
 }
 
 func allElements(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
 	_ = json.NewEncoder(w).Encode(element)
 }
+
+func atomicNumber(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	vars := mux.Vars(r)
+	atomicNumber := vars["atomicNumber"]
+	fmt.Println(atomicNumber)
+	for _, data := range element {
+		if strings.Compare(atomicNumber, data.AtomicNumber) == 0 {
+			_ = json.NewEncoder(w).Encode(data)
+			break
+		}
+	}
+}
+
 
 func main() {
 
@@ -56,6 +74,7 @@ func main() {
 	// Routers
 	router := mux.NewRouter()
 	router.HandleFunc("/", allElements).Methods("GET")
+	router.HandleFunc("/atomicNumber/{atomicNumber}", atomicNumber).Methods("GET")
 
 	//CORS Headers
 	headersOk := handlers.AllowedHeaders([]string{"Authorization"})
