@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
@@ -52,10 +53,17 @@ func main() {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	_ = json.Unmarshal(byteValue, &element)
 
+	// Routers
 	router := mux.NewRouter()
 	router.HandleFunc("/", allElements).Methods("GET")
 
-	err = http.ListenAndServe(":3000", router)
+	//CORS Headers
+	headersOk := handlers.AllowedHeaders([]string{"Authorization"})
+	originsOk := handlers.AllowedOrigins([]string{"*"})
+	methodsOk := handlers.AllowedMethods([]string{"GET"})
+
+	//Starting Server
+	err = http.ListenAndServe(":3000", handlers.CORS(originsOk, headersOk, methodsOk)(router))
 	if err!=nil {
 		log.Fatal(err)
 	}
