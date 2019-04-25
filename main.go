@@ -50,14 +50,33 @@ func atomicNumber(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	atomicNumber := vars["atomicNumber"]
-	fmt.Println(atomicNumber)
+
 	for _, data := range element {
-		if strings.Compare(atomicNumber, data.AtomicNumber) == 0 {
+		atomicNumber = strings.ToLower(atomicNumber)
+		DataAtomicNumber := strings.ToLower(data.AtomicNumber)
+		if strings.Compare(atomicNumber, DataAtomicNumber) == 0 {
 			_ = json.NewEncoder(w).Encode(data)
 			break
 		}
 	}
 }
+
+func atomicName(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type","application/json")
+
+	vars := mux.Vars(r)
+	atomicName := vars["atomicName"]
+
+	for _, data := range element {
+		atomicName = strings.ToLower(atomicName)
+		DataAtomicName := strings.ToLower(data.Name)
+		if strings.Compare(atomicName, DataAtomicName) == 0{
+			_ = json.NewEncoder(w).Encode(data)
+			break
+		}
+	}
+}
+
 
 
 func main() {
@@ -75,6 +94,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", allElements).Methods("GET")
 	router.HandleFunc("/atomicNumber/{atomicNumber}", atomicNumber).Methods("GET")
+	router.HandleFunc("/atomicName/{atomicName}", atomicName).Methods("GET")
 
 	//CORS Headers
 	headersOk := handlers.AllowedHeaders([]string{"Authorization"})
