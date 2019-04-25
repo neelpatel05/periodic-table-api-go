@@ -1,0 +1,17 @@
+{
+	"ImportPath": "periodic-table-api-go",
+	"GoVersion": "go1.12",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/handlers",
+			"Comment": "v1.4.0-6-gac6d24f",
+			"Rev": "ac6d24f88de4584385a0cb3a88f953d08a2f7a05"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.7.1",
+			"Rev": "c5c6c98bc25355028a63748a498942a6398ccd22"
+		}
+	]
+}

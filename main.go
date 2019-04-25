@@ -2,43 +2,42 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-	"fmt"
 	"strings"
 )
 
 var element []elements
 
 type elements struct {
-	AtomicMass string `json:"atomicMass"` //0
-	AtomicNumber string `json:"atomicNumber"` //1
-	AtomicRadius string `json:"atomicRadius"` //2
-	BoilingPoint string `json:"boilingPoint"` //3
-	BondingType string `json:"bondingType"` //4
-	CpkHexColor string `json:"cpkHexColor"` //5
-	Density string `json:"density"` //6
-	ElectronAffinity string `json:"electronAffinity"` //7
-	Electronegativity string `json:"electronegativity"` //8
+	AtomicMass              string `json:"atomicMass"`              //0
+	AtomicNumber            string `json:"atomicNumber"`            //1
+	AtomicRadius            string `json:"atomicRadius"`            //2
+	BoilingPoint            string `json:"boilingPoint"`            //3
+	BondingType             string `json:"bondingType"`             //4
+	CpkHexColor             string `json:"cpkHexColor"`             //5
+	Density                 string `json:"density"`                 //6
+	ElectronAffinity        string `json:"electronAffinity"`        //7
+	Electronegativity       string `json:"electronegativity"`       //8
 	ElectronicConfiguration string `json:"electronicConfiguration"` //9
-	GroupBlock string `json:"groupBlock"` //10
-	IonRadius string `json:"ionRadius"` //11
-	IonizationEnergy string `json:"ionizationEnergy"` //12
-	MeltingPoint string `json:"meltingPoint"` //13
-	Name string `json:"name"` //14
-	OxidationStates string `json:"oxidationStates"` //15
-	StandardState string `json:"standardState"` //16
-	Symbol string `json:"symbol"` //17
-	VanDelWaalsRadius string `json:"vanDelWaalsRadius"` //18
-	YearDiscovered string `json:"yearDiscovered"` //19
+	GroupBlock              string `json:"groupBlock"`              //10
+	IonRadius               string `json:"ionRadius"`               //11
+	IonizationEnergy        string `json:"ionizationEnergy"`        //12
+	MeltingPoint            string `json:"meltingPoint"`            //13
+	Name                    string `json:"name"`                    //14
+	OxidationStates         string `json:"oxidationStates"`         //15
+	StandardState           string `json:"standardState"`           //16
+	Symbol                  string `json:"symbol"`                  //17
+	VanDelWaalsRadius       string `json:"vanDelWaalsRadius"`       //18
+	YearDiscovered          string `json:"yearDiscovered"`          //19
 }
 
-
-func allElements(w http.ResponseWriter, r *http.Request) {
+func allElements(w http.ResponseWriter, _ *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	_ = json.NewEncoder(w).Encode(element)
@@ -55,7 +54,7 @@ func atomicNumber(w http.ResponseWriter, r *http.Request) {
 	for _, data := range element {
 		atomicNumber = strings.ToLower(atomicNumber)
 		DataAtomicNumber := strings.ToLower(data.AtomicNumber)
-		if strings.Compare(atomicNumber, DataAtomicNumber) == 0{
+		if strings.Compare(atomicNumber, DataAtomicNumber) == 0 {
 			finalData = data
 			flag = true
 			break
@@ -73,7 +72,7 @@ func atomicNumber(w http.ResponseWriter, r *http.Request) {
 }
 
 func atomicName(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
 	atomicName := vars["atomicName"]
@@ -101,7 +100,7 @@ func atomicName(w http.ResponseWriter, r *http.Request) {
 }
 
 func atomicSymbol(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
 	atomicSymbol := vars["atomicSymbol"]
@@ -129,20 +128,19 @@ func atomicSymbol(w http.ResponseWriter, r *http.Request) {
 }
 
 func atomicBonding(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
 	atomicBonding := vars["atomicBonding"]
 	flag := false
 	var finalData []interface{}
 
-
 	for _, data := range element {
 		atomicBonding = strings.ToLower(atomicBonding)
 		DataAtomicBonding := strings.ToLower(data.BondingType)
 		if strings.Compare(atomicBonding, DataAtomicBonding) == 0 {
 			finalData = append(finalData, data)
-			flag=true
+			flag = true
 		}
 	}
 
@@ -157,20 +155,19 @@ func atomicBonding(w http.ResponseWriter, r *http.Request) {
 }
 
 func atomicGroup(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
 	atomicGroup := vars["atomicGroup"]
 	flag := false
 	var finalData []interface{}
 
-
 	for _, data := range element {
 		atomicGroup = strings.ToLower(atomicGroup)
 		DataAtomicGroup := strings.ToLower(data.GroupBlock)
 		if strings.Compare(atomicGroup, DataAtomicGroup) == 0 {
 			finalData = append(finalData, data)
-			flag=true
+			flag = true
 		}
 	}
 
@@ -185,20 +182,19 @@ func atomicGroup(w http.ResponseWriter, r *http.Request) {
 }
 
 func atomicState(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type","application/json")
+	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
 	atomicState := vars["atomicState"]
 	flag := false
 	var finalData []interface{}
 
-
 	for _, data := range element {
 		atomicState = strings.ToLower(atomicState)
 		DataAtomicState := strings.ToLower(data.StandardState)
 		if strings.Compare(atomicState, DataAtomicState) == 0 {
 			finalData = append(finalData, data)
-			flag=true
+			flag = true
 		}
 	}
 
@@ -239,8 +235,9 @@ func main() {
 	methodsOk := handlers.AllowedMethods([]string{"GET"})
 
 	//Starting Server
-	err = http.ListenAndServe(":3000", handlers.CORS(originsOk, headersOk, methodsOk)(router))
-	if err!=nil {
+	port := ":" + os.Getenv("PORT")
+	err = http.ListenAndServe(port, handlers.CORS(originsOk, headersOk, methodsOk)(router))
+	if err != nil {
 		log.Fatal(err)
 	}
 }
