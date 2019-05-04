@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"io/ioutil"
@@ -37,13 +36,24 @@ type elements struct {
 	YearDiscovered          string `json:"yearDiscovered"`          //19
 }
 
+func cleanup() {
+	if r:=recover(); r!=nil {
+		log.Fatal(r)
+	}
+}
+
 func allElements(w http.ResponseWriter, _ *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
-	_ = json.NewEncoder(w).Encode(element)
+	err := json.NewEncoder(w).Encode(element)
+	if err!=nil {
+		panic(err.Error())
+	}
 }
 
 func atomicNumber(w http.ResponseWriter, r *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -62,16 +72,23 @@ func atomicNumber(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if flag {
-		_ = json.NewEncoder(w).Encode(finalData)
+		err := json.NewEncoder(w).Encode(finalData)
+		if err!=nil {
+			panic(err.Error())
+		}	
 	} else {
 		err := make(map[string]interface{})
 		err["status"] = false
 		err["message"] = "Not Found"
-		_ = json.NewEncoder(w).Encode(err)
+		err1 := json.NewEncoder(w).Encode(err)
+		if err1!=nil {
+			panic(err1.Error())
+		}
 	}
 }
 
 func atomicName(w http.ResponseWriter, r *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -90,16 +107,23 @@ func atomicName(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if flag {
-		_ = json.NewEncoder(w).Encode(finalData)
+		err := json.NewEncoder(w).Encode(finalData)
+		if err!=nil {
+			panic(err.Error())
+		}
 	} else {
 		err := make(map[string]interface{})
 		err["status"] = false
 		err["message"] = "Not Found"
-		_ = json.NewEncoder(w).Encode(err)
+		err1 := json.NewEncoder(w).Encode(err)
+		if err1!=nil {
+			panic(err1.Error())
+		}
 	}
 }
 
 func atomicSymbol(w http.ResponseWriter, r *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -118,16 +142,23 @@ func atomicSymbol(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if flag {
-		_ = json.NewEncoder(w).Encode(finalData)
+		err := json.NewEncoder(w).Encode(finalData)
+		if err!=nil {
+			panic(err.Error())
+		}
 	} else {
 		err := make(map[string]interface{})
 		err["status"] = false
 		err["message"] = "Not Found"
-		_ = json.NewEncoder(w).Encode(err)
+		err1 := json.NewEncoder(w).Encode(err)
+		if err1!=nil {
+			panic(err1.Error())
+		}
 	}
 }
 
 func atomicBonding(w http.ResponseWriter, r *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -145,16 +176,23 @@ func atomicBonding(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if flag {
-		_ = json.NewEncoder(w).Encode(finalData)
+		err := json.NewEncoder(w).Encode(finalData)
+		if err!=nil {
+			panic(err.Error())
+		}
 	} else {
 		err := make(map[string]interface{})
 		err["status"] = false
 		err["message"] = "Not Found"
-		_ = json.NewEncoder(w).Encode(err)
+		err1 := json.NewEncoder(w).Encode(err)
+		if err1!=nil {
+			panic(err1.Error())
+		}
 	}
 }
 
 func atomicGroup(w http.ResponseWriter, r *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -172,16 +210,23 @@ func atomicGroup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if flag {
-		_ = json.NewEncoder(w).Encode(finalData)
+		err := json.NewEncoder(w).Encode(finalData)
+		if err!=nil {
+			panic(err.Error())
+		}	
 	} else {
 		err := make(map[string]interface{})
 		err["status"] = false
 		err["message"] = "Not Found"
-		_ = json.NewEncoder(w).Encode(err)
+		err1 := json.NewEncoder(w).Encode(err)
+		if err1!=nil {
+			panic(err1.Error())
+		}
 	}
 }
 
 func atomicState(w http.ResponseWriter, r *http.Request) {
+	defer cleanup()
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -209,15 +254,22 @@ func atomicState(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	defer cleanup()
 
 	// Reading JSON file
 	jsonFile, err := os.Open("data.json")
 	if err != nil {
-		fmt.Println("Error reading file")
+		panic(err.Error())
 	}
 	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	_ = json.Unmarshal(byteValue, &element)
+	byteValue, err := ioutil.ReadAll(jsonFile)
+	if err!=nil {
+		panic(err.Error())
+	}
+	err = json.Unmarshal(byteValue, &element)
+	if err!=nil {
+		panic(err.Error())
+	}
 
 	// Routers
 	router := mux.NewRouter()
@@ -238,6 +290,6 @@ func main() {
 	port := ":" + os.Getenv("PORT")
 	err = http.ListenAndServe(port, handlers.CORS(originsOk, headersOk, methodsOk)(router))
 	if err != nil {
-		log.Fatal(err)
+		panic(err.Error())
 	}
 }
